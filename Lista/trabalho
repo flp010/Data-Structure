@@ -1,0 +1,73 @@
+function LinkedList() {
+    let Node = function (element) {
+        this.element = element;
+        this.next = null;
+    };
+    let length = 0;
+    let head = null;
+
+    this.append = function (element) {
+        let node = new Node(element), current;
+        if (head === null) {
+            head = node;
+            node.next = head;
+        } else {
+            current = head;
+            while (current.next !== head) {
+                current = current.next;
+            }
+            current.next = node;
+            node.next = head; 
+        }
+        length++;
+    };
+
+    this.toString = function () {
+        if (head === null) return '';
+
+        let current = head
+        let string = '';
+        let count = 0;
+
+        while (count < length) {
+            string += current.element + (current.next !== head ? ' -> ' : '');
+            current = current.next;
+            count++;
+        }
+        return string;
+    };
+    
+    this.josephus = function (M) {
+        let current = head, prev = null;
+
+        while (length > 1) {
+            let count = 1;
+            while (count !== M) {
+                prev = current;
+                current = current.next;
+                count++;
+            }
+            console.log('Removendo:', current.element);
+            prev.next = current.next;
+            current = current.next;
+            length--;
+            console.log("Lista", this.toString())
+        }
+
+        return current.element;
+    };
+}
+const lista = new LinkedList();
+
+let x = [];
+for (let i = 0; i < 10; i++) {
+    x.push(Math.floor(Math.random() * 11));
+}
+x.forEach(num => lista.append(num));
+
+let m = 3;
+
+console.log("Lista: " + lista.toString());
+console.time("Tempo de execução")
+console.log("Última pessoa restante: " + lista.josephus(m));
+console.timeEnd("Tempo de execução")
